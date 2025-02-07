@@ -18,7 +18,7 @@ RUN apt update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone Flask app repository
-RUN git clone -b master .
+RUN git clone -b master https://github.com/CBcodes03/combined.git .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
