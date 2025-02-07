@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Live Object Detection</title>
+</head>
+<body>
+    <h1>Child Safety Object Detection</h1>
+    <img src="{{ url_for('video_feed') }}" width="70%">
+    
+    <h2>Upload an Image for Detection</h2>
+    <form action="{{ url_for('safety_upload') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*">
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,186 @@
+/* General styles for the body */
+body {
+  background-color: #ffe4b5;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  text-align: center;
+}
+
+body:after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/public/DEEPLEARNING.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.75;
+  z-index: -1;
+}
+
+/* Container div for the form */
+#container-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  overflow: hidden;
+}
+
+/* Styling for the form */
+#form-div {
+  background-color: rgba(255, 178, 96, 0.546);
+  border-radius: 15px;
+  padding: 20px 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.388);
+  width: 100%;
+  max-width: 900px;
+  height: 87%;
+  overflow-y: auto;
+  margin: 0;
+}
+
+/* Scrollbar styling (optional, for better aesthetics) */
+#form-div::-webkit-scrollbar {
+  width: 10px;
+}
+
+#form-div::-webkit-scrollbar-track {
+  background: #ffe4b5;
+  border-radius: 5px;
+}
+
+#form-div::-webkit-scrollbar-thumb {
+  background: #f57c00;
+  border-radius: 5px;
+}
+
+#form-div::-webkit-scrollbar-thumb:hover {
+  background: #e66a00;
+}
+
+/* Form titles and labels */
+#h1-container {
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  color: #ffffff;
+  font-weight: bold !important;
+  font-size: 24px;
+  position: sticky;
+  background-color: rgba(252, 130, 0, 0.67) !important;
+  color: white !important;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+h2 {
+  color: #000000 !important;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+#compulsory {
+  color: red;
+}
+
+/* Input fields */
+input[type="number"],
+input[type="text"] {
+  width: 20%;
+  padding: 8px;
+  border: 1px solid #ff8624;
+  border-radius: 5px;
+  background-color: #ffffff;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* Radio button styling */
+input[type="radio"] {
+  margin-right: 8px;
+}
+
+label[for^="Olympiad_Participation"],
+label[for^="Scholarship"],
+label[for^="School"],
+label[for^="Career_sprt"],
+label[for^="Act_sprt"],
+label[for^="Fant_arts"],
+label[for^="Won_arts"] {
+  font-weight: normal;
+}
+
+/* Submit button */
+button {
+  background-color: #ff8103;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px !important;
+  font-size: 16px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto !important;
+}
+
+button:hover {
+  background-color: #ff9225;
+}
+
+/* Predicted outcome */
+#predictedOutcome {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #f57c00;
+}
+
+/* Hidden by default */
+.hidden {
+  display: none;
+}
+
+/* Centered hobby display */
+#hobbyDisplay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 20px 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 2000;
+  text-align: center;
+  animation: fadeInScale 0.8s ease-in-out;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff8103;
+}
+
+/* Fade-in and scale-up animation */
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

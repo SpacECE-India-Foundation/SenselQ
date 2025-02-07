@@ -1,0 +1,191 @@
+/* General styles for the body */
+body {
+    background-color: #fffaf3;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding-top: 0;
+    text-align: center;
+    position: relative;
+}
+
+body:after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/static/public/DEEPLEARNING.png'); 
+    background-size: cover;
+    background-position: center;
+    opacity: 0.75;
+    z-index: -1;
+}
+
+/* Main container styling */
+#container-div {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 80vh; 
+    overflow: hidden;
+}
+
+/* Form container styling */
+#form-div {
+    background-color: rgba(255, 178, 96, 0.546); 
+    border-radius: 15px;
+    padding: 20px 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.388);
+    width: 100%;
+    max-width: 900px; 
+    height: 87%; 
+    overflow-y: auto; 
+    margin: 0; 
+}
+
+#form-div:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    color: #ffffff !important;
+    text-align: center;
+    font-weight:bold!important;
+    position: sticky;
+  }
+  
+  h1 {
+    font-size: 24px;
+    text-align: center;
+    background-color: rgba(252, 130, 0, 0.67);
+    color: white;
+    padding: 10px; 
+    border-radius: 8px; 
+    display:inline-block;
+    align-items: center;
+   
+  }
+
+/* Labels and input fields */
+label {
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 8px;
+    display: block;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="number"],
+input[type="file"] {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #e67e22;
+    border-radius: 6px;
+    background-color: #fff8e6;
+    font-size: 1em;
+    margin-bottom: 15px;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="url"]:focus,
+input[type="number"]:focus,
+input[type="file"]:focus {
+    outline: none;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Submit button */
+button {
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 1.2em;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:hover {
+    background-color: #e67e22;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+@media (max-width: 600px) {
+    #form-div {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    button {
+        font-size: 1em;
+        padding: 10px 15px;
+    }
+}
+
+
+.alert {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+
+  .alert-success {
+    background-color: #28a745;
+    color: white;
+    border: 1px solid #28a745;
+  }
+  
+  .alert-success .close {
+    color: white;
+  }
+  
+
+  .alert-danger {
+    background-color: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
+  }
+  
+  .alert-danger .close {
+    color: white;
+  }
+  
+
+  .alert .close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: inherit;
+    cursor: pointer;
+  }
+  
+
+  .alert .close span {
+    font-weight: bold;
+    color: white;
+  }
+  
+ 
+  .alert-success, .alert-danger {
+    font-weight: bold;
+    padding-right: 20px;
+  }
+  
+  

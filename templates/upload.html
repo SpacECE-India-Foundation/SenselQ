@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Activites</title>
+    <link rel="stylesheet" href="/static/upload.css" />
+  </head>
+  <body>
+    <h1>Upload Activites</h1>
+    <!-- Main container for the page -->
+    <div id="container-div">
+      <div id="form-div">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+        <div class="mb-3">
+          {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %} {% endwith %}
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+          <!-- Hobby field -->
+          <div class="form-group">
+            <label for="hobby">Hobby:</label>
+            <input type="text" name="hobby" id="hobby" required />
+          </div>
+
+          <!-- Title field -->
+          <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" required />
+          </div>
+
+          <!-- Video URL field -->
+          <div class="form-group">
+            <label for="url">Video URL:</label>
+            <input type="url" name="url" id="url" />
+          </div>
+
+          <!-- Image upload field -->
+          <div class="form-group">
+            <label for="file">Image:</label>
+            <input type="file" name="file" id="file" required />
+          </div>
+
+          <!-- Description field -->
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" name="description" id="description" required />
+          </div>
+
+          <!-- Age field -->
+          <div class="form-group">
+            <label for="age_group">Age:</label>
+            <input type="number" name="age" id="age" min="4" max="8" required />
+          </div>
+
+          <!-- Materials field -->
+          <div class="form-group">
+            <label for="materials">Materials:</label>
+            <input type="text" name="materials" id="materials" required />
+          </div>
+
+          <!-- Duration field -->
+          <div class="form-group">
+            <label for="duration">Duration (in hours):</label>
+            <input type="text" name="duration" id="duration" required />
+          </div>
+
+          <!-- Submit button -->
+          <div class="form-group">
+            <button type="submit">Upload</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

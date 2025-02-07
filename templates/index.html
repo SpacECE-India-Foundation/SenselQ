@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parent-Child Activity Planner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  </head>
+
+  <body>
+    <div id="h1-container">
+      <h1 class="mt-4 mb-4 text-center">Interactive Parent-Child Activity Planner</h1>
+    </div>
+
+    <div id="container-div">
+      <div id="form-div">
+        <h2 class="mt-4 mb-4">Enter Your Child's Details:</h2>
+        <!-- <a href="/upload">Upload Videos</a> -->
+        <form id="predictionForm" action="{{url_for('predict')}}" method="POST">
+          <!-- Age -->
+          <label for="age">Enter your Child's Age (4-8): <span id="compulsory">*</span></label>
+          <input type="number" id="age" name="age" min="4" max="8" required /><br /><br />
+
+          <!-- Olympiad Participation -->
+          <label>Has your child participated in any Olympiad? <span id="compulsory">*</span></label
+          ><br />
+          <input type="radio" id="Olympiad_Participation_yes" name="Olympiad_Participation" value="1" required />
+          <label for="Olympiad_Participation_yes">Yes</label><br />
+          <input type="radio" id="Olympiad_Participation_no" name="Olympiad_Participation" value="0" />
+          <label for="Olympiad_Participation_no">No</label><br /><br />
+
+          <!-- Scholarship -->
+          <label>Has he/she received any scholarship? <span id="compulsory">*</span></label
+          ><br />
+          <input type="radio" id="Scholarship_yes" name="Scholarship" value="1" required />
+          <label for="Scholarship_yes">Yes</label><br />
+          <input type="radio" id="Scholarship_no" name="Scholarship" value="0" />
+          <label for="Scholarship_no">No</label>
+          <br /><br />
+
+          <!-- School -->
+          <label>Love's going to school? <span id="compulsory">*</span></label
+          ><br />
+          <input type="radio" id="School_yes" name="School" value="1" required />
+          <label for="School_yes">Yes</label><br />
+          <input type="radio" id="School_no" name="School" value="0" />
+          <label for="School_no">No</label>
+          <br /><br />
+
+          <!-- Grasp_power -->
+          <label for="Grasp_pow">His/Her Grasping power? (1-6): <span id="compulsory">*</span></label>
+          <input type="number" id="Grasp_pow" name="Grasp_pow" min="1" max="6" required /><br /><br />
+
+          <!-- Career_sprt -->
+          <label>Want's to pursue his/her career in sports? <span id="compulsory">*</span></label
+          ><br />
+          <input type="radio" id="Career_sprt_yes" name="Career_sprt" value="1" required />
+          <label for="Career_sprt_yes">Yes</label><br />
+          <input type="radio" id="Career_sprt_no" name="Career_sprt" value="0" />
+          <label for="Career_sprt_no">No</label><br /><br />
+
+          <!-- Act_sprt -->
+          <label>Regular in his/her sports activities? <span id="compulsory">*</span></label
+          ><br />
+          <input type="radio" id="Act_sprt_yes" name="Act_sprt" value="1" required />
+          <label for="Act_sprt_yes">Yes</label><br />
+          <input type="radio" id="Act_sprt_no" name="Act_sprt" value="0" />
+          <label for="Act_sprt_no">No</label><br /><br />
+
+          <!-- Fant_arts -->
+          <label>Love creating fantasy paintings? <span id="compulsory">*</span></label
+          ><br />
+          <input type="radio" id="Fant_arts_yes" name="Fant_arts" value="1" required />
+          <label for="Fant_arts_yes">Yes</label><br />
+          <input type="radio" id="Fant_arts_no" name="Fant_arts" value="0" />
+          <label for="Fant_arts_no">No</label><br /><br />
+
+          <!-- Won_arts -->
+          <label>Won art competitions? <span id="compulsory">*</span></label
+          ><br />
+          <input type="radio" id="Won_arts_yes" name="Won_arts" value="1" required />
+          <label for="Won_arts_yes">Yes</label><br />
+          <input type="radio" id="Won_arts_no" name="Won_arts" value="0" />
+          <label for="Won_arts_no">No</label><br />
+          <input type="radio" id="Won_arts_maybe" name="Won_arts" value="2" />
+          <label for="Won_arts_maybe">Maybe</label><br /><br />
+
+          <!-- Time_art -->
+          <label for="Time_art">Time utilized in Arts in hours? (1-6)<span id="compulsory">*</span></label>
+          <input type="number" id="Time_art" name="Time_art" min="1" max="6" required /><br /><br />
+
+          <button type="submit" id="predictButton">Get Activity Suggestions</button> <br /><br />
+          <!-- <div id="predictedOutcome">Predicted Hobby: N/A</div> -->
+
+          <div id="hobbyDisplay" class="hidden">
+            <p id="hobbyText"></p>
+          </div>
+          <div id="predictedOutcome"></div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='script.js')}}"></script>
+  </body>
+</html>
