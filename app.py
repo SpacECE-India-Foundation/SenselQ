@@ -45,6 +45,10 @@ load_dotenv()
 # Set up the file upload folder
 app.config['UPLOAD_FOLDER'] = 'uploads/'  
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'avif'} 
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'avif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # MongoDB setup
 try:
@@ -284,6 +288,7 @@ def show_videos():
             video['image'] = base64.b64encode(video['image']).decode('utf-8')
 
     return render_template("videos.html", hobby=hobby, age_group=age_group, videos=videos)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
