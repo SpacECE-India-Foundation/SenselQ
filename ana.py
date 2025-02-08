@@ -1,8 +1,9 @@
 from deepface import DeepFace
+from PIL import Image
 import os
 import json
-
-def analyze_emotion_from_image(image_path):
+import numpy as np
+def analyze_emotion_from_image(image_bytes):
     """
     Analyze emotions from a single image using DeepFace.
     
@@ -12,10 +13,13 @@ def analyze_emotion_from_image(image_path):
     Returns:
         dict: A JSON-compatible dictionary containing the dominant emotion or error message.
     """
+    image = Image.open(image_bytes)
+    image=image.convert('RGB')
+    image_np = np.array(image)
     try:
         # First, check for faces in the image
         analysis = DeepFace.analyze(
-            img_path=image_path,
+            img_path=image_np,
             actions=["emotion"],  # Only analyze emotions
             enforce_detection=True  # Ensure face detection is performed
         )

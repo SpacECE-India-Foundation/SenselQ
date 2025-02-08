@@ -14,8 +14,10 @@ from pymongo import MongoClient
 import pickle
 import numpy as np
 import base64
+from proj3 import proj3
 
 app = Flask(__name__, static_folder='dist', static_url_path='/')
+app.register_blueprint(proj3,url_prefix='/proj3')
 app.secret_key = 'secret_key'
 CORS(app)
 
@@ -38,13 +40,6 @@ else:
     else:
         print("Failed to download the file. Status Code:", response.status_code)
 
-IMAGE_FOLDER = 'IMAGE_FOLDER'
-app.config['IMAGE_FOLDER'] = IMAGE_FOLDER
-
-def save_image_from_base64(base64_data, filename):
-    image_data = base64.b64decode(base64_data)
-    image = Image.open(BytesIO(image_data))
-    image.save(os.path.join(app.config['IMAGE_FOLDER'], filename))
 load_dotenv()
 
 # Set up the file upload folder
@@ -68,68 +63,6 @@ except Exception as e:
 with open('rf_model.pkl', 'rb') as file:
     model = pickle.load(file)
 
-# Configure upload folder and allowed extensions
-UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'avif'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-## proj 3 funcs and vars
-
-CONFIG_PATH = "yolov3.cfg"
-WEIGHTS_PATH = "yolov3.weights"
-CLASSES_PATH = "coco.names"
-
-SAFE_OBJECTS = ["pen", "pencil", "toy", "book", "cup", "chair", "bed"]
-HARMFUL_OBJECTS = ["knife", "scissors"]
-
-def load_yolo_model():
-    net = cv2.dnn.readNet(WEIGHTS_PATH, CONFIG_PATH)
-    with open(CLASSES_PATH, "r") as f:
-        classes = [line.strip() for line in f.readlines()]
-    layer_names = net.getLayerNames()
-    output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
-    return net, classes, output_layers
-
-net, classes, output_layers = load_yolo_model()
-
-def detect_objects(frame):
-    height, width, _ = frame.shape
-    blob = cv2.dnn.blobFromImage(frame, 0.00392, (416, 416), (0, 0, 0), True, crop=False)
-    net.setInput(blob)
-    outputs = net.forward(output_layers)
-    
-    class_ids, confidences, boxes = [], [], []
-    
-    for output in outputs:
-        for detection in output:
-            scores = detection[5:]
-            class_id = np.argmax(scores)
-            confidence = scores[class_id]
-            label = str(classes[class_id])
-            if confidence > 0.5:
-                center_x, center_y, w, h = (
-                    int(detection[0] * width),
-                    int(detection[1] * height),
-                    int(detection[2] * width),
-                    int(detection[3] * height),
-                )
-                x, y = int(center_x - w / 2), int(center_y - h / 2)
-                boxes.append([x, y, w, h])
-                confidences.append(float(confidence))
-                class_ids.append(class_id)
-    
-    indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
-    if len(indexes) > 0:
-        for i in indexes.flatten():
-            x, y, w, h = boxes[i]
-            label = str(classes[class_ids[i]])
-            color = (0, 255, 0) if label in SAFE_OBJECTS else (0, 0, 255) if label in HARMFUL_OBJECTS else (255, 255, 255)
-            cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
-            cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
-
-        return frame
 
 
 #routes
@@ -152,15 +85,9 @@ def upload_image():
     if request.method == 'POST':
         # Get image data from request
         image_data = request.json['image']
-        filename = "image_" + str(int(time.time())) + ".png"
-        save_image_from_base64(image_data, filename)
-        
-        # Process the image using your analyze_emotion_from_image function
-        path = os.path.join(app.config['IMAGE_FOLDER'], filename)
-        result = ana.analyze_emotion_from_image(path)
-        
-        os.remove(path)
-        
+        image_data_bytes = base64.b64decode(image_data)
+        image_bytes = BytesIO(image_data_bytes)
+        result = ana.analyze_emotion_from_image(image_bytes)
         # Return the result
         print(result)
         return jsonify({
@@ -357,29 +284,6 @@ def show_videos():
             video['image'] = base64.b64encode(video['image']).decode('utf-8')
 
     return render_template("videos.html", hobby=hobby, age_group=age_group, videos=videos)
-
-##proj3 routes
-@app.route('/proj3')
-def home3():
-    return render_template('safety.html')
-
-@app.route('/proj3/video_feed')
-def video_feed():
-    return 'need updation'
-
-@app.route('/proj3/upload', methods=['POST'])
-def safety_upload():
-    if 'file' not in request.files:
-        return "No file uploaded", 400
-    file = request.files['file']
-    if file.filename == '':
-        return "No selected file", 400
-    
-    image = Image.open(file)
-    frame = np.array(image)
-    frame = detect_objects(frame)
-    _, buffer = cv2.imencode('.jpg', frame)
-    return Response(buffer.tobytes(), mimetype='image/jpeg')
 
 if __name__ == "__main__":
     app.run(debug=True)
