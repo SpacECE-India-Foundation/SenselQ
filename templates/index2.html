@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpacECE - Child Safety Object Detection System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            margin-top:30px;
+            text-align: center;
+            background-color: #f4f4f4;
+            position: relative;
+        }
+        .top-left-logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px;
+            height: auto;
+            margin-left: 350px;
+            margin-top: -25px;
+        }
+        .header-text{
+            margin-left: 150px;
+        }
+        .buttons {
+            margin: 20px 0;
+        }
+        button {
+            background-color: rgb(207, 169, 0);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: black;
+            color: rgb(207, 169, 0);
+        }
+        #video-container, #upload-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        #upload-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #upload-form {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        #file-input {
+            padding: 10px;
+            border: 2px solid rgb(193, 191, 191);
+            border-radius: 5px;
+            font-size: 16px;
+            width: 80%;
+        }
+
+        #uploaded-image {
+            width: 400px;
+            height: auto;
+            max-height:300px;
+            border: 3px solid black;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: block;
+        }
+
+        #upload-status, #upload-detectedObject {
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        #video, #video-frame, #uploaded-image {
+            width: 400px;
+            max-height: 350px;
+            height: auto;
+            border: 3px solid black;
+            border-radius: 10px;
+            background-color: #000;
+        }
+        #status, #detectedObject, #upload-status, #upload-detectedObject {
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .capture-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            right: 600px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #4b4949;
+        }
+    </style>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="top-left-logo" width="50px" height="50px"> 
+
+    <h1 class="header-text">SpacECE - Child Safety Object Detection System</h1>
+
+    <div class="buttons">
+        <button onclick="showVideo()">Live Video</button>
+        <button onclick="showUpload()">Upload Image</button>
+    </div>
+
+    <div id="video-container">
+        <video id="video" autoplay></video>
+        <canvas id="canvas" style="display: none;"></canvas>
+        <img id="video-frame" style="display: none;">
+        <p id="status">Status: </p>
+        <p id="detectedObject">Detected: None</p>
+        
+        <div class="capture-buttons">
+            <button onclick="startCapturing()">Start Capturing</button>
+            <button onclick="stopCapturing()">Stop Capturing</button>
+        </div>
+    </div>
+
+    <div id="upload-container">
+        <form id="upload-form" onsubmit="uploadImage(event)">
+            <input type="file" id="file-input" accept="image/*">
+            <button type="submit">Upload</button>
+        </form>
+        <img id="uploaded-image" style="display: none;">
+        <p id="upload-status">Status: </p>
+        <p id="upload-detectedObject">Detected: None</p>
+    </div>
+
+    <div class="footer">SpacECE Internship Project By Gurucharan</div>
+
+    <script>
+        let video = document.getElementById("video");
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        let videoFrame = document.getElementById("video-frame");
+        let capturing = false;
+        let videoStream = null;
+
+        function showVideo() {
+            document.getElementById("video-container").style.display = "flex";
+            document.getElementById("upload-container").style.display = "none";
+            startVideo();
+        }
+
+        function showUpload() {
+            document.getElementById("upload-container").style.display = "flex";
+            document.getElementById("video-container").style.display = "none";
+            stopCapturing();
+        }
+
+        function startVideo() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => { 
+                    video.srcObject = stream; 
+                    videoStream = stream; 
+                })
+                .catch(error => console.error("Camera access error:", error));
+        }
+
+        function startCapturing() {
+            capturing = true;
+            captureFrame();
+        }
+
+        function stopCapturing() {
+            capturing = false;
+        }
+
+        function captureFrame() {
+            if (!capturing) return;
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(blob => {
+                let formData = new FormData();
+                formData.append("file", blob, "frame.jpg");
+
+                fetch("/proj3/upload_image", { method: "POST", body: formData })
+                    .then(response => response.json())
+                    .then(data => {
+                        videoFrame.src = 'data:image/jpeg;base64,' + data.image;
+                        videoFrame.style.display = "block";
+                        video.style.display = "none";
+                        document.getElementById("status").innerHTML = "Status: " + data.status;
+                        document.getElementById("detectedObject").innerHTML = "Detected: " + data.detections;
+                    })
+                    .catch(error => console.error("Error:", error));
+
+                setTimeout(captureFrame, 500);
+            }, "image/jpeg");
+        }
+
+        function uploadImage(event) {
+            event.preventDefault();
+            let file = document.getElementById("file-input").files[0];
+            let formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/proj3/upload_image", { method: "POST", body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("uploaded-image").src = 'data:image/jpeg;base64,' + data.image;
+                    document.getElementById("uploaded-image").style.display = "block";
+                    document.getElementById("upload-status").innerHTML = "Status: " + data.status;
+                    document.getElementById("upload-detectedObject").innerHTML = "Detected: " + data.detections;
+                });
+        }
+    </script>
+</body>
+</html>
+
